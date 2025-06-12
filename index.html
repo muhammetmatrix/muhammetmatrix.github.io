@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>muhammetmatrix</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: url('wallpaper.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid white;
+      margin-bottom: 1rem;
+      background: url('user.jpg') center/cover;
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      background: #1119;
+      padding: 0.3rem 1rem;
+      border-radius: 10px;
+    }
+    .desc {
+      font-size: 1rem;
+      color: #ccc;
+      margin-bottom: 2rem;
+    }
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      width: 100%;
+      max-width: 300px;
+    }
+    .link-btn {
+      text-align: center;
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 10px;
+      background-color: #2d2d2d;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .link-btn:hover {
+      background-color: #444;
+    }
+    .blog-section {
+      margin-top: 3rem;
+      max-width: 700px;
+      text-align: center;
+    }
+    .blog-post {
+      background: #ffffff10;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+    .blog-post h3 {
+      margin-bottom: 0.5rem;
+    }
+    .footer {
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-pic"></div>
+  <h1>muhammetmatrix</h1>
+  <div class="desc">Java, C# & Minecraft Developer</div>
+
+  <div class="links">
+    <a class="link-btn" href="https://discord.com" target="_blank">Discord</a>
+    <a class="link-btn" href="https://github.com" target="_blank">GitHub</a>
+    <a class="link-btn" href="https://instagram.com" target="_blank">Instagram</a>
+  </div>
+
+  <div class="footer">Made with ❤️ by muhammetmatrix</div>
+</body>
+</html>
