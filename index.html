@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sana küçük bir şey</title>
+  <title>4:20</title>
 
   <style>
     * {
@@ -12,16 +12,35 @@
       box-sizing: border-box;
     }
 
+    html,
     body {
       width: 100%;
-      height: 100vh;
+      height: 100%;
       background: #000;
-      color: white;
-      font-family: "Georgia", serif;
+    }
+
+    body {
+      min-height: 100vh;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
       overflow: hidden;
+      background:
+        radial-gradient(circle at center, rgba(255, 255, 255, 0.10), transparent 32%),
+        radial-gradient(circle at 50% 75%, rgba(255, 120, 185, 0.10), transparent 36%),
+        #000;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,.42) 62%, rgba(0,0,0,.9) 100%);
     }
 
     .screen {
+      position: relative;
+      z-index: 1;
       width: 100%;
       height: 100vh;
       display: flex;
@@ -29,160 +48,324 @@
       justify-content: center;
       text-align: center;
       padding: 24px;
-      position: relative;
     }
 
     .glow {
       position: absolute;
-      width: 320px;
-      height: 320px;
-      background: rgba(255, 255, 255, 0.08);
+      width: min(460px, 86vw);
+      height: min(460px, 86vw);
       border-radius: 50%;
+      background: rgba(255,255,255,.08);
       filter: blur(70px);
-      animation: pulse 4s infinite alternate;
+      animation: breathe 4.5s ease-in-out infinite alternate;
+      pointer-events: none;
     }
 
-    @keyframes pulse {
-      from {
-        transform: scale(0.9);
-        opacity: 0.4;
-      }
-      to {
-        transform: scale(1.2);
-        opacity: 0.8;
-      }
+    @keyframes breathe {
+      from { transform: scale(.92); opacity: .45; }
+      to { transform: scale(1.14); opacity: .85; }
     }
 
     .content {
+      position: relative;
       z-index: 2;
-      max-width: 760px;
+      width: min(760px, 94vw);
       opacity: 0;
-      transform: translateY(20px);
-      animation: fadeIn 2s ease forwards;
+      transform: translateY(16px);
+      animation: contentIn 1.4s ease forwards;
     }
 
-    @keyframes fadeIn {
+    @keyframes contentIn {
       to {
         opacity: 1;
         transform: translateY(0);
       }
-    }
-
-    h1 {
-      font-size: clamp(30px, 6vw, 64px);
-      font-weight: normal;
-      margin-bottom: 24px;
-      letter-spacing: 1px;
-    }
-
-    p {
-      font-size: clamp(18px, 3vw, 28px);
-      line-height: 1.6;
-      color: #ddd;
-    }
-
-    button {
-      margin-top: 32px;
-      background: transparent;
-      color: white;
-      border: 1px solid rgba(255,255,255,0.5);
-      padding: 14px 28px;
-      border-radius: 999px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background: white;
-      color: black;
     }
 
     .hidden {
       display: none;
     }
 
-    .line {
-      opacity: 0;
-      transform: translateY(12px);
-      animation: lineIn 1.4s ease forwards;
-      margin-bottom: 16px;
+    h1 {
+      font-size: clamp(38px, 8vw, 78px);
+      font-weight: 400;
+      line-height: 1;
+      margin-bottom: 24px;
+      letter-spacing: .2px;
     }
 
-    @keyframes lineIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .intro-text {
+      font-size: clamp(18px, 3vw, 27px);
+      line-height: 1.6;
+      color: rgba(255,255,255,.78);
+      margin: 4px auto;
+      max-width: 620px;
     }
 
     .small {
       margin-top: 28px;
-      font-size: 15px;
-      color: #888;
+      font: 14px/1.5 Arial, sans-serif;
+      color: rgba(255,255,255,.45);
+    }
+
+    button {
+      margin-top: 30px;
+      padding: 14px 30px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.42);
+      background: transparent;
+      color: #fff;
+      font: 15px/1 Arial, sans-serif;
+      cursor: pointer;
+      transition: .25s ease;
+    }
+
+    button:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    .lyrics-box {
+      min-height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lyric-line {
+      width: min(860px, 94vw);
+      font-size: clamp(30px, 6.4vw, 66px);
+      line-height: 1.13;
+      font-weight: 400;
+      letter-spacing: -.45px;
+      text-wrap: balance;
+      color: rgba(255,255,255,.96);
+      text-shadow: 0 0 34px rgba(255,255,255,.16);
+      opacity: 0;
+      transform: translateY(12px);
+      filter: blur(10px);
+    }
+
+    .lyric-line.show {
+      animation: lyricIn .82s ease forwards;
+    }
+
+    .lyric-line.fade {
+      animation: lyricOut .28s ease forwards;
+    }
+
+    .lyric-line.intro-line {
+      font-size: clamp(27px, 5.4vw, 54px);
+      color: rgba(255,255,255,.88);
+    }
+
+    @keyframes lyricIn {
+      0% {
+        opacity: 0;
+        transform: translateY(14px);
+        filter: blur(12px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes lyricOut {
+      to {
+        opacity: 0;
+        transform: translateY(-8px);
+        filter: blur(8px);
+      }
+    }
+
+    .fade-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      background: #000;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .fade-screen.run {
+      animation: softDark .62s ease forwards;
+    }
+
+    @keyframes softDark {
+      0% { opacity: 0; }
+      42% { opacity: .34; }
+      100% { opacity: 0; }
+    }
+
+    @media (max-width: 560px) {
+      .screen { padding: 18px; }
+      .lyrics-box { min-height: 220px; }
+      .lyric-line { letter-spacing: -.25px; }
     }
   </style>
 </head>
 
 <body>
-  <audio id="song" src="audio1.mp3"></audio>
+  <audio id="song" src="audio.mp3" preload="auto"></audio>
+  <div class="fade-screen" id="fadeScreen"></div>
 
-  <div class="screen">
+  <main class="screen">
     <div class="glow"></div>
 
-    <div class="content" id="intro">
-      <h1>Yine sen</h1>
-      <p>Bu şarkı sana.</p>
+    <section class="content" id="intro">
+      <h1>Selam Berra.</h1>
+      <p class="intro-text">Geçen sefer bunu sevmiştin.</p>
+      <p class="intro-text">Bu sefer şarkıyı sana göre seçtim.</p>
       <p class="small">Hazırsan dokun.</p>
-      <button onclick="start()">Başlat</button>
-    </div>
+      <button id="startBtn" type="button">Başlat</button>
+    </section>
 
-    <div class="content hidden" id="lyricsBox">
-      <div id="lyrics"></div>
-    </div>
-  </div>
+    <section class="content hidden" id="lyricsBox">
+      <div class="lyrics-box">
+        <p class="lyric-line" id="lyricLine"></p>
+      </div>
+    </section>
+  </main>
 
   <script>
     const song = document.getElementById("song");
     const intro = document.getElementById("intro");
     const lyricsBox = document.getElementById("lyricsBox");
-    const lyrics = document.getElementById("lyrics");
+    const lyricLine = document.getElementById("lyricLine");
+    const startBtn = document.getElementById("startBtn");
+    const fadeScreen = document.getElementById("fadeScreen");
 
-    // Buraya telif hakkı sende olan sözleri veya kendi yazdığın satırları ekle.
-    // "I Wanna Be Yours" tam sözlerini buraya yapıştırırsan telif açısından sorun olabilir.
-    const lines = [
-      "Bazı şarkılar vardır,",
-      "insanın aklına direkt birini getirir.",
-      "Bu da benim için öyle.",
-      "Çalınca seni düşünüyorum.",
-      "Gülüşünü, sesini, yanımda oluşunu...",
-      "Ve galiba en çok da şunu:",
-      "Benim en güzel tesadüfüm sensin.",
-      "Bu şarkı sana.",
-      "Çünkü bazı duygular konuşarak değil,",
-      "böyle anlatılır."
+    const introLines = [
+      { time: 0.50, text: "Bunu açınca aklıma direkt sen geldin.", type: "intro" },
+      { time: 4.20, text: "Çünkü bazı şarkılar bir insana yakışıyor.", type: "intro" },
+      { time: 7.80, text: "Bu da sana yakışıyor.", type: "intro" },
+      { time: 11.30, text: "Şimdi sadece dinle.", type: "intro" }
     ];
 
-    function start() {
-      song.volume = 0.75;
-      song.play();
+    const lrcText = `
+[00:13.50]Öldür duyguları söyle geriye ne bıraktın
+[00:17.00]Dördü yirmi geçer ama hâlâ aramadın
+[00:21.00]Söndü mi tüm şansım böyle neden geri kaldı
+[00:25.00]Cartier gözlükler
+[00:26.80]Gözyaşlarımı saklı
+[00:29.00]Öldür duyguları söyle geriye ne baktın
+[00:32.00]Dördü yirmi geçer ama hâlâ aramadın
+[00:36.00]Söndü mü tüm şansım böyle neden geri kaldı
+[00:40.00]Cartier gözlükler
+[00:41.80]Gözyaşlarımı saklı
+[00:43.80]Koç bağı girdim terlik kız dedi dizim benlik
+[00:47.40]Hayır aptal olmam bebek çıkarıyon hep bi terslik
+[00:51.40]Söyle adın ne güzellik bu gece olayım sensin
+[00:55.40]Güven tek seferlik bebek etme hiç tembellik
+[00:58.92]Dolu pembe ruju boynum evet seviyo benle oynamayı
+[01:02.66]Soldum terlemekten ama balta taşır omzum
+[01:06.36]Bebek suratıma otur
+[01:08.26]Ben sen aslan gibi boldum
+[01:10.18]Oldu deniz kadar ıslak
+[01:12.00]Bide gerekiyo kondom
+[01:14.28]Öldür duyguları söyle geriye ne bıraktın
+[01:17.92]Dördü yirmi geçer ama hâlâ aramadın
+[01:21.64]Söndü mü tüm şansım böyle neden geri kaldı
+[01:25.42]Cartier gözlükler
+[01:27.00]Gözyaşlarımı saklı
+[01:29.30]Öldür duyguları söyle geriye ne bıraktın
+[01:32.90]Dördü yirmi geçer ama hâlâ aramadın
+[01:36.64]Söndü mü tüm şansım böyle neden geri kaldı
+[01:40.40]Cartier gözlükler
+[01:41.98]Gözyaşlarımı saklı
+`;
 
+    const lyricLines = parseLRC(lrcText).map(line => ({ ...line, type: "lyric" }));
+    const timeline = [...introLines, ...lyricLines].sort((a, b) => a.time - b.time);
+
+    let activeIndex = -1;
+    let rafId = null;
+
+    function parseLRC(text) {
+      return text
+        .split("\n")
+        .map(line => {
+          const match = line.match(/^\[(\d{2}):(\d{2})\.(\d{2})\](.*)$/);
+          if (!match) return null;
+
+          return {
+            time: Number(match[1]) * 60 + Number(match[2]) + Number(match[3]) / 100,
+            text: match[4].trim()
+          };
+        })
+        .filter(Boolean);
+    }
+
+    function findLineIndex(time) {
+      let index = -1;
+
+      for (let i = 0; i < timeline.length; i++) {
+        if (timeline[i].time <= time) index = i;
+        else break;
+      }
+
+      return index;
+    }
+
+    function flash() {
+      fadeScreen.classList.remove("run");
+      void fadeScreen.offsetWidth;
+      fadeScreen.classList.add("run");
+    }
+
+    function showLine(index) {
+      if (index === activeIndex || index < 0) return;
+
+      const item = timeline[index];
+      activeIndex = index;
+
+      lyricLine.classList.remove("show", "intro-line");
+      lyricLine.classList.add("fade");
+      flash();
+
+      setTimeout(() => {
+        lyricLine.textContent = item.text;
+        lyricLine.className = "lyric-line";
+        if (item.type === "intro") lyricLine.classList.add("intro-line");
+        void lyricLine.offsetWidth;
+        lyricLine.classList.add("show");
+      }, 220);
+    }
+
+    function tick() {
+      showLine(findLineIndex(song.currentTime));
+      rafId = requestAnimationFrame(tick);
+    }
+
+    async function start() {
       intro.classList.add("hidden");
       lyricsBox.classList.remove("hidden");
+      lyricLine.textContent = "";
+      activeIndex = -1;
 
-      showLines();
+      try {
+        song.volume = 0.78;
+        await song.play();
+        cancelAnimationFrame(rafId);
+        tick();
+      } catch (error) {
+        lyricLine.textContent = "Şarkı dosyası bulunamadı.";
+        lyricLine.classList.add("show");
+      }
     }
 
-    function showLines() {
-      lines.forEach((text, index) => {
-        setTimeout(() => {
-          const line = document.createElement("p");
-          line.className = "line";
-          line.textContent = text;
-          lyrics.appendChild(line);
-        }, index * 2500);
-      });
-    }
+    startBtn.addEventListener("click", start);
+
+    song.addEventListener("seeked", () => {
+      activeIndex = -1;
+      showLine(findLineIndex(song.currentTime));
+    });
+
+    song.addEventListener("ended", () => {
+      cancelAnimationFrame(rafId);
+    });
   </script>
 </body>
 </html>
