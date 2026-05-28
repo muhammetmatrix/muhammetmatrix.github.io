@@ -1,1 +1,374 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4:20</title>
 
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      background: #020617;
+    }
+
+    body {
+      min-height: 100vh;
+      color: #eef8ff;
+      font-family: Georgia, "Times New Roman", serif;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at center, rgba(125, 211, 252, 0.18), transparent 33%),
+        radial-gradient(circle at 50% 76%, rgba(37, 99, 235, 0.16), transparent 38%),
+        radial-gradient(circle at 18% 18%, rgba(14, 165, 233, 0.10), transparent 28%),
+        #020617;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at center, transparent 0%, rgba(2, 6, 23, .38) 60%, rgba(1, 4, 14, .92) 100%);
+    }
+
+    .screen {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .glow {
+      position: absolute;
+      width: min(480px, 86vw);
+      height: min(480px, 86vw);
+      border-radius: 50%;
+      background: rgba(56, 189, 248, .18);
+      filter: blur(78px);
+      animation: breathe 4.5s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes breathe {
+      from { transform: scale(.92); opacity: .45; }
+      to { transform: scale(1.14); opacity: .85; }
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      width: min(760px, 94vw);
+      opacity: 0;
+      transform: translateY(16px);
+      animation: contentIn 1.4s ease forwards;
+    }
+
+    @keyframes contentIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    h1 {
+      font-size: clamp(38px, 8vw, 78px);
+      font-weight: 400;
+      line-height: 1;
+      margin-bottom: 24px;
+      letter-spacing: .2px;
+      color: #f0f9ff;
+      text-shadow: 0 0 38px rgba(125, 211, 252, .18);
+    }
+
+    .intro-text {
+      font-size: clamp(18px, 3vw, 27px);
+      line-height: 1.6;
+      color: rgba(224, 242, 254, .80);
+      margin: 4px auto;
+      max-width: 620px;
+    }
+
+    .small {
+      margin-top: 28px;
+      font: 14px/1.5 Arial, sans-serif;
+      color: rgba(186, 230, 253, .52);
+    }
+
+    button {
+      margin-top: 30px;
+      padding: 14px 30px;
+      border-radius: 999px;
+      border: 1px solid rgba(125, 211, 252, .52);
+      background: rgba(14, 165, 233, .07);
+      color: #e0f2fe;
+      font: 15px/1 Arial, sans-serif;
+      cursor: pointer;
+      transition: .25s ease;
+      box-shadow: 0 0 26px rgba(56, 189, 248, .10);
+    }
+
+    button:hover {
+      background: #e0f2fe;
+      color: #020617;
+      border-color: rgba(224, 242, 254, .92);
+      box-shadow: 0 0 42px rgba(125, 211, 252, .22);
+    }
+
+    .lyrics-box {
+      min-height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lyric-line {
+      width: min(860px, 94vw);
+      font-size: clamp(30px, 6.4vw, 66px);
+      line-height: 1.13;
+      font-weight: 400;
+      letter-spacing: -.45px;
+      text-wrap: balance;
+      color: rgba(240, 249, 255, .97);
+      text-shadow: 0 0 34px rgba(125, 211, 252, .20);
+      opacity: 0;
+      transform: translateY(12px);
+      filter: blur(10px);
+    }
+
+    .lyric-line.show {
+      animation: lyricIn .82s ease forwards;
+    }
+
+    .lyric-line.fade {
+      animation: lyricOut .28s ease forwards;
+    }
+
+    .lyric-line.intro-line {
+      font-size: clamp(27px, 5.4vw, 54px);
+      color: rgba(224, 242, 254, .90);
+    }
+
+    @keyframes lyricIn {
+      0% {
+        opacity: 0;
+        transform: translateY(14px);
+        filter: blur(12px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes lyricOut {
+      to {
+        opacity: 0;
+        transform: translateY(-8px);
+        filter: blur(8px);
+      }
+    }
+
+    .fade-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      background: #020617;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .fade-screen.run {
+      animation: softDark .62s ease forwards;
+    }
+
+    @keyframes softDark {
+      0% { opacity: 0; }
+      42% { opacity: .34; }
+      100% { opacity: 0; }
+    }
+
+    @media (max-width: 560px) {
+      .screen { padding: 18px; }
+      .lyrics-box { min-height: 220px; }
+      .lyric-line { letter-spacing: -.25px; }
+    }
+  </style>
+</head>
+
+<body>
+  <audio id="song" src="audio.mp3" preload="auto"></audio>
+  <div class="fade-screen" id="fadeScreen"></div>
+
+  <main class="screen">
+    <div class="glow"></div>
+
+    <section class="content" id="intro">
+      <h1>Selam Berra.</h1>
+      <button id="startBtn" type="button">Hazırsan dokun.</button>
+    </section>
+
+    <section class="content hidden" id="lyricsBox">
+      <div class="lyrics-box">
+        <p class="lyric-line" id="lyricLine"></p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const song = document.getElementById("song");
+    const intro = document.getElementById("intro");
+    const lyricsBox = document.getElementById("lyricsBox");
+    const lyricLine = document.getElementById("lyricLine");
+    const startBtn = document.getElementById("startBtn");
+    const fadeScreen = document.getElementById("fadeScreen");
+
+const introLines = [
+  { time: 0.50, text: "Bu şarkıyı sen attın.", type: "intro" },
+  { time: 4.20, text: "Ben de dinledim.", type: "intro" },
+  { time: 7.80, text: "Ama şarkıdan çok sen kaldın.", type: "intro" },
+  { time: 11.30, text: "O yüzden şimdi biraz sen varsın içinde.", type: "intro" }
+];
+
+const lrcText = `
+[00:13.50]Öldür duyguları söyle geriye ne bıraktın
+[00:17.00]Dördü yirmi geçer ama hâlâ aramadın
+[00:21.00]Söndü mü tüm şansım böyle neden geri kaldım
+[00:25.00]Cartier gözlükler
+[00:26.80]Gözyaşlarımız saklı
+[00:29.00]Öldür duyguları söyle geriye ne bıraktın
+[00:32.00]Dördü yirmi geçer ama hâlâ aramadın
+[00:36.00]Söndü mü tüm şansım böyle neden geri kaldım
+[00:40.00]Cartier gözlükler
+[00:41.80]Gözyaşlarımız saklı
+[00:43.80]Buluşmada giydim terlik kız dedi değilsin benlik
+[00:47.40]Hayır aptal olma bebek çıkarıyon hep bi terslik
+[00:51.40]Söyle adın ne güzellik bu gece olayım sensin
+[00:55.40]Güven tek seferlik bebek etme hiç tembellik
+[00:58.92]Dolu pembe rujla boynum evet seviyo benle oyunu
+[01:02.66]Soldum terlemekten ama bacak taşır omzum
+[01:06.36]Bebek suratıma otur
+[01:08.26]Bense Hasan gibi boğuldum
+[01:10.18]Oldu deniz kadar ıslak
+[01:12.00]Ve de gerekiyo kolluk
+[01:14.28]Öldür duyguları söyle geriye ne bıraktın
+[01:17.92]Dördü yirmi geçer ama hâlâ aramadın
+[01:21.64]Söndü mü tüm şansım böyle neden geri kaldım
+[01:25.42]Cartier gözlükler
+[01:27.00]Gözyaşlarımız saklı
+[01:29.30]Öldür duyguları söyle geriye ne bıraktın
+[01:32.90]Dördü yirmi geçer ama hâlâ aramadın
+[01:36.64]Söndü mü tüm şansım böyle neden geri kaldım
+[01:40.40]Cartier gözlükler
+[01:41.98]Gözyaşlarımız saklı
+`;
+
+    const lyricLines = parseLRC(lrcText).map(line => ({ ...line, type: "lyric" }));
+    const timeline = [...introLines, ...lyricLines].sort((a, b) => a.time - b.time);
+
+    let activeIndex = -1;
+    let rafId = null;
+
+    function parseLRC(text) {
+      return text
+        .split("\n")
+        .map(line => {
+          const match = line.match(/^\[(\d{2}):(\d{2})\.(\d{2})\](.*)$/);
+          if (!match) return null;
+
+          return {
+            time: Number(match[1]) * 60 + Number(match[2]) + Number(match[3]) / 100,
+            text: match[4].trim()
+          };
+        })
+        .filter(Boolean);
+    }
+
+    function findLineIndex(time) {
+      let index = -1;
+
+      for (let i = 0; i < timeline.length; i++) {
+        if (timeline[i].time <= time) index = i;
+        else break;
+      }
+
+      return index;
+    }
+
+    function flash() {
+      fadeScreen.classList.remove("run");
+      void fadeScreen.offsetWidth;
+      fadeScreen.classList.add("run");
+    }
+
+    function showLine(index) {
+      if (index === activeIndex || index < 0) return;
+
+      const item = timeline[index];
+      activeIndex = index;
+
+      lyricLine.classList.remove("show", "intro-line");
+      lyricLine.classList.add("fade");
+      flash();
+
+      setTimeout(() => {
+        lyricLine.textContent = item.text;
+        lyricLine.className = "lyric-line";
+        if (item.type === "intro") lyricLine.classList.add("intro-line");
+        void lyricLine.offsetWidth;
+        lyricLine.classList.add("show");
+      }, 220);
+    }
+
+    function tick() {
+      showLine(findLineIndex(song.currentTime));
+      rafId = requestAnimationFrame(tick);
+    }
+
+    async function start() {
+      intro.classList.add("hidden");
+      lyricsBox.classList.remove("hidden");
+      lyricLine.textContent = "";
+      activeIndex = -1;
+
+      try {
+        song.volume = 0.78;
+        await song.play();
+        cancelAnimationFrame(rafId);
+        tick();
+      } catch (error) {
+        lyricLine.textContent = "Şarkı dosyası bulunamadı.";
+        lyricLine.classList.add("show");
+      }
+    }
+
+    startBtn.addEventListener("click", start);
+
+    song.addEventListener("seeked", () => {
+      activeIndex = -1;
+      showLine(findLineIndex(song.currentTime));
+    });
+
+    song.addEventListener("ended", () => {
+      cancelAnimationFrame(rafId);
+    });
+  </script>
+</body>
+</html>
